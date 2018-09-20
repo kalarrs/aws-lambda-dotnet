@@ -80,7 +80,7 @@ namespace Amazon.Lambda.Serialization.Json
                     }
                 }
             }
-            else if (type.FullName.Equals("Amazon.Lambda.CloudWatchEvents.ECSEvents.ECSEvent", StringComparison.Ordinal))
+            else if (type.FullName.StartsWith("Amazon.Lambda.CloudWatchEvents."))
             {
                 foreach (JsonProperty property in properties)
                 {
