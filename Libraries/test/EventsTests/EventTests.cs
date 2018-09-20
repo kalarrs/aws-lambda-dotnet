@@ -30,6 +30,45 @@ namespace Amazon.Lambda.Tests
 
     public class EventTest
     {
+        public abstract class CloudWatchEvent<T>
+        {
+            public string Version { get; set; }
+            public string Id { get; set; }
+            public string Detailtype { get; set; }
+            public string Source { get; set; }
+            public string Account { get; set; }
+            public DateTime Time { get; set; }
+            public string Region { get; set; }
+            public string[] Resources { get; set; }
+            public T Detail { get; set; }
+        }
+
+        public class Detail
+        {
+            
+        }
+        
+        [Fact]
+        public void AbstractCloudWatchEventTest()
+        {
+            var json = "";
+            
+            using (var fileStream = File.OpenRead("cloudwatch-event.json"))
+            {
+                var serializer = new JsonSerializer();
+                var cloudWatchEvent = serializer.Deserialize<CloudWatchEvent<Detail>>(fileStream);
+
+
+                Handle(cloudWatchEvent);
+            }
+        }
+        
+        private void Handle(CloudWatchEvent<Detail> cloudWatchEvent)
+        {
+            Console.WriteLine($"Id: {cloudWatchEvent.Id}");
+        }
+        
+        
         [Fact]
         public void S3PutTest()
         {
