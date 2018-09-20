@@ -30,6 +30,45 @@ namespace Amazon.Lambda.Tests
 
     public class EventTest
     {
+        
+        public interface ICloudWatchEvent<T>
+        {
+            string Version { get; set; }
+            string Id { get; set; }
+            string Detailtype { get; set; }
+            string Source { get; set; }
+            string Account { get; set; }
+            DateTime Time { get; set; }
+            string Region { get; set; }
+            string[] Resources { get; set; }
+            T Detail { get; set; }
+        }
+
+        public class Detail
+        {
+            
+        }
+        
+        [Fact]
+        public void InterfaceCloudWatchEventTest()
+        {
+            var json = "";
+            
+            using (var fileStream = File.OpenRead("cloudwatch-event.json"))
+            {
+                var serializer = new JsonSerializer();
+                var cloudWatchEvent = serializer.Deserialize<ICloudWatchEvent<Detail>>(fileStream);
+
+
+                Handle(cloudWatchEvent);
+            }
+        }
+        
+        private void Handle(ICloudWatchEvent<Detail> cloudWatchEvent)
+        {
+            Console.WriteLine($"Id: {cloudWatchEvent.Id}");
+        }
+        
         [Fact]
         public void S3PutTest()
         {
